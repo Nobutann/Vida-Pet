@@ -67,7 +67,21 @@ def menu():
                         else:
                             print("Seleção inválida")
                 case 3:
-                    pass
+                    while True: 
+                        limpar_terminal()
+                        print("1 - Editar nome")
+                        print("2 - Editar espécie")
+                        print("3 - Editar raça")
+                        print("4 - Editar data de nascimento")
+                        print("5 - Editar peso")
+                        print("0 - Voltar")
+
+                        edit = int(input())
+
+                        match edit:
+                            case 1:
+                                limpar_terminal()
+                                editar_arquivos(pet["Nome"])
                 case 4:
                     pass
                 case 0:
@@ -91,10 +105,19 @@ def salvar_arquivos(pet):
 def visualizar_arquivos():
     try:
         with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
-            content = file.read()
-            print(content)
+            print(file.read())
     except FileNotFoundError:
         print("Não existe nenhum arquivo ainda, tente utilizar o \"Adicionar\" primeiro.")
+
+def editar_arquivos(modify):
+    with open("dados pet.txt", 'r', encoding="utf-8", newline="") as file:
+        content = file.read()
+
+    modified = modify(content)
+
+    with open("dados.txt", 'w', newline="", encoding="utf-8") as file:
+        file.write(modified)
+        
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
