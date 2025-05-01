@@ -67,32 +67,10 @@ def menu():
                         else:
                             print("Seleção inválida")
                 case 3:
-                    while True: 
-                        limpar_terminal()
-                        print("1 - Editar nome")
-                        print("2 - Editar espécie")
-                        print("3 - Editar raça")
-                        print("4 - Editar data de nascimento")
-                        print("5 - Editar peso")
-                        print("0 - Voltar")
-
-                        edit = int(input())
-
-                        match edit:
-                            case 1:
-                                editar_arquivos()
-                            case 2:
-                                editar_arquivos()
-                            case 3:
-                                editar_arquivos()
-                            case 4:
-                                editar_arquivos()
-                            case 5:
-                                editar_arquivos()
-                            case 0:
-                                break
-                            case _:
-                                print("Inválido")
+                    limpar_terminal()
+                    editar_arquivos()
+                    input()
+                    limpar_terminal()
                 case 4:
                     pass
                 case 0:
@@ -121,39 +99,78 @@ def visualizar_arquivos():
         print("Não existe nenhum arquivo ainda, tente utilizar o \"Adicionar\" primeiro.")
 
 def editar_arquivos():
-    with open("dados pet.txt", 'r', encoding="utf-8") as file:
-        lines = file.readlines()
+    try:
+        with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
+            content = file.read().strip()
 
-    for line in lines:
-        print(line.strip())
-        
-    edit = int(input())
-    
-    blank = ""
-    match edit:
-        case 1:
-            blank = "Nome"
-        case 2:
-            blank = "Espécie"
-        case 3:
-            blank = "Raça"
-        case 4:
-            blank = "Data de nascimento"
-        case 5:
-            blank = "Peso"
-        case _:
-            print("Inválido")
-    
-    new_value = input()
+        blocks = content.split("\n\n")
+        pets = []
 
-    for i in range(len(lines)):
-        if lines[i].startswith(f"{blank}:"):
-            lines[i] = f"{blank}: {new_value}\n"
-            break
-    
-    with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
-        file.writelines(lines)
+        for block in blocks:
+            pet = {}
+            lines = block.split("\n")
+            for line in lines:
+                key, value = line.split(": ", 1)
+                pet[key] = value
+            
+            pets.append(pet)
         
+        for i, pet in enumerate(pets):
+            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
+
+        try:
+            idx = int(input("Número para editar: "))
+            
+            if 0 <= idx < len(pets):
+                pet = pets[idx]
+                while True:
+                    limpar_terminal()
+                    print("1 - Editar nome")
+                    print("2 - Editar espécie")
+                    print("3 - Editar raça")
+                    print("4 - Editar data de nascimento")
+                    print("5 - Editar peso")
+                    print("0 - Salvar")
+
+                    option = int(input())
+
+                    match option:
+                        case 1:
+                            limpar_terminal()
+                            pet["Nome"] = input()
+                        case 2:
+                            limpar_terminal()
+                            pet["Espécie"] = input()
+                        case 3:
+                            limpar_terminal()
+                            pet["Raça"] = input()
+                        case 4:
+                            limpar_terminal()
+                            pet["Data de nascimento"] = input()
+                        case 5:
+                            limpar_terminal()
+                            pet["Peso"] = input()
+                        case 0:
+                            break
+                        case _:
+                            print("Inválido")
+            else:
+                print("Indíce inválido")
+        except ValueError:
+            print("Erro")
+        
+        with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
+            for pet in pets:
+                for key, value in pet.items():
+                    file.write(f"{key}: {value}\n")
+                file.write("\n")
+
+        print("Informações não atualizadas")
+        print("Pressione Enter para continuar...")
+
+    except FileNotFoundError:
+        print("Arquivo não existe")    
+
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
