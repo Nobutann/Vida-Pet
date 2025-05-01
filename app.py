@@ -80,8 +80,19 @@ def menu():
 
                         match edit:
                             case 1:
-                                limpar_terminal()
-                                editar_arquivos(pet["Nome"])
+                                editar_arquivos()
+                            case 2:
+                                editar_arquivos()
+                            case 3:
+                                editar_arquivos()
+                            case 4:
+                                editar_arquivos()
+                            case 5:
+                                editar_arquivos()
+                            case 0:
+                                break
+                            case _:
+                                print("Inválido")
                 case 4:
                     pass
                 case 0:
@@ -109,14 +120,39 @@ def visualizar_arquivos():
     except FileNotFoundError:
         print("Não existe nenhum arquivo ainda, tente utilizar o \"Adicionar\" primeiro.")
 
-def editar_arquivos(modify):
-    with open("dados pet.txt", 'r', encoding="utf-8", newline="") as file:
-        content = file.read()
+def editar_arquivos():
+    with open("dados pet.txt", 'r', encoding="utf-8") as file:
+        lines = file.readlines()
 
-    modified = modify(content)
+    for line in lines:
+        print(line.strip())
+        
+    edit = int(input())
+    
+    blank = ""
+    match edit:
+        case 1:
+            blank = "Nome"
+        case 2:
+            blank = "Espécie"
+        case 3:
+            blank = "Raça"
+        case 4:
+            blank = "Data de nascimento"
+        case 5:
+            blank = "Peso"
+        case _:
+            print("Inválido")
+    
+    new_value = input()
 
-    with open("dados.txt", 'w', newline="", encoding="utf-8") as file:
-        file.write(modified)
+    for i in range(len(lines)):
+        if lines[i].startswith(f"{blank}:"):
+            lines[i] = f"{blank}: {new_value}\n"
+            break
+    
+    with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
+        file.writelines(lines)
         
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
