@@ -29,7 +29,11 @@ def menu():
                         print("5 - Adicionar peso")
                         print("6 - Salvar")
                         print("0 - Voltar")
-                        add = int(input())
+                        try:
+                            add = int(input())
+                        except ValueError:
+                            print("Inválido")
+                            continue
                         match add:
                             case 1:
                                 limpar_terminal()
@@ -60,7 +64,11 @@ def menu():
                     while True:
                         visualizar_arquivos()
                         print("\nClique \"0\" para voltar")
-                        voltar = int(input())
+                        try:
+                            voltar = int(input())
+                        except ValueError:
+                            print("Inválido")
+                            continue
                         if voltar == 0:
                             limpar_terminal()
                             break
