@@ -29,7 +29,11 @@ def menu():
                         print("5 - Adicionar peso")
                         print("6 - Salvar")
                         print("0 - Voltar")
-                        add = int(input())
+                        try:
+                            add = int(input())
+                        except ValueError:
+                            print("Inválido")
+                            continue
                         match add:
                             case 1:
                                 limpar_terminal()
@@ -60,7 +64,11 @@ def menu():
                     while True:
                         visualizar_arquivos()
                         print("\nClique \"0\" para voltar")
-                        voltar = int(input())
+                        try:
+                            voltar = int(input())
+                        except ValueError:
+                            print("Inválido")
+                            continue
                         if voltar == 0:
                             limpar_terminal()
                             break
@@ -72,7 +80,10 @@ def menu():
                     input()
                     limpar_terminal()
                 case 4:
-                    pass
+                    limpar_terminal()
+                    deletar()
+                    input()
+                    limpar_terminal()
                 case 0:
                     limpar_terminal()
                     break
@@ -165,11 +176,51 @@ def editar_arquivos():
                     file.write(f"{key}: {value}\n")
                 file.write("\n")
 
-        print("Informações não atualizadas")
+        print("Informações atualizadas")
         print("Pressione Enter para continuar...")
 
     except FileNotFoundError:
         print("Arquivo não existe")    
+
+def deletar():
+    try:
+        with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
+            content = file.read().strip()
+        
+        blocks = content.split("\n\n")
+        pets = []
+
+        for block in blocks:
+            pet = {}
+            lines = block.split("\n")
+            
+            for line in lines:
+                key, value = line.split(": ", 1)
+                pet[key] = value
+
+            pets.append(pet)
+
+        for i, pet in enumerate(pets):
+            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
+        
+        try:
+            idx = int(input("Número para excluir: "))
+
+            del pets[idx]
+        except ValueError:
+            print("Valor Inválido")
+        
+        with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
+            for pet in pets:
+                for key, value in pets.items():
+                    file.write(f"{key}: {value}\n")
+
+        print("Informações atualizadas")
+        print("Pressione Enter para continuar...")
+    
+    except FileNotFoundError:
+        print("Arquivo não encontrado")
+
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
