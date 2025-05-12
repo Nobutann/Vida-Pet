@@ -1,4 +1,21 @@
-import os
+import os, time
+
+def tela_inicial():
+    start = \
+    """       ██╗   ██╗██╗██████╗  █████╗     ██████╗ ███████╗████████╗
+       ██║   ██║██║██╔══██╗██╔══██╗    ██╔══██╗██╔════╝╚══██╔══╝
+       ██║   ██║██║██║  ██║███████║    ██████╔╝█████╗     ██║   
+       ╚██╗ ██╔╝██║██║  ██║██╔══██║    ██╔═══╝ ██╔══╝     ██║   
+        ╚████╔╝ ██║██████╔╝██║  ██║    ██║     ███████╗   ██║   
+         ╚═══╝  ╚═╝╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚══════╝   ╚═╝"""
+
+    for line in start.splitlines():
+        print(line)
+        time.sleep(0.2)
+
+    input("\nPressione Enter para continuar...")
+    limpar_terminal()
+    menu()
 
 def menu():
     while True:
@@ -225,4 +242,4 @@ def deletar():
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-menu()
+tela_inicial()
