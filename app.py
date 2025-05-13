@@ -177,7 +177,8 @@ def editar_arquivos():
                             pet["Data de nascimento"] = input()
                         case 5:
                             limpar_terminal()
-                            pet["Peso"] = input()
+                            peso = input("Digite o peso de pet (em números): ")
+                            pet["Peso"] = peso + "kg"
                         case 0:
                             break
                         case _:
@@ -242,4 +243,94 @@ def deletar():
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-tela_inicial()
+def gerenciar_metas():
+    while True:
+        print("1 - Adicionar meta")
+        print("2 - Visualizar metas")
+        print("3 - Alterar status de meta")
+        print("4 - Excluir meta")
+        print("0 - Voltar")
+        try:
+            escolha = int(input("Escolha uma opção: "))
+        except ValueError:
+            print("Opção inválida")
+            continue
+
+        if escolha == 1:
+            limpar_terminal()
+            nome = input("Nome do pet: ")
+            meta = input("Descreva a meta: ")
+            with open("metas.txt", 'a', encoding="utf-8") as file:
+                file.write(f"Nome: {nome}\nMeta: {meta}\nStatus: Não concluída\n\n")
+            print("Meta adicionada com sucesso!\n")
+        elif escolha == 2:
+            limpar_terminal()
+            try:
+                with open("metas.txt", 'r', encoding="utf-8") as file:
+                    print(file.read())
+            except FileNotFoundError:
+                print("Nenhuma meta registrada ainda.\n")
+        elif escolha == 3:
+            limpar_terminal()
+            try:
+                with open("metas.txt", 'r', encoding="utf-8") as file:
+                    content = file.read().strip().split("\n\n")
+                
+                metas = []
+                for bloco in content:
+                    meta_info = {}
+                    for linha in bloco.split("\n"):
+                        chave, valor = linha.split(": ", 1)
+                        meta_info[chave] = valor
+                    metas.append(meta_info)
+
+                for i, meta in enumerate(metas):
+                    print(f"{i} - {meta['Nome']} | {meta['Meta']} | Status: {meta['Status']}")
+                
+                idx = int(input("Número da meta para alterar status: "))
+                if metas[idx]["Status"] == "Concluída":
+                    metas[idx]["Status"] = "Não concluída"
+                else:
+                    metas[idx]["Status"] = "Concluída"
+                
+                with open("metas.txt", 'w', encoding="utf-8") as file:
+                    for meta in metas:
+                        for k, v in meta.items():
+                            file.write(f"{k}: {v}\n")
+                        file.write("\n")
+                print("Status alterado com sucesso!\n")
+            except (FileNotFoundError, ValueError, IndexError):
+                print("Erro ao alterar a meta.")
+        elif escolha == 4:
+            limpar_terminal()
+            try:
+                with open("metas.txt", 'r', encoding="utf-8") as file:
+                    content = file.read().strip().split("\n\n")
+                
+                metas = []
+                for bloco in content:
+                    meta_info = {}
+                    for linha in bloco.split("\n"):
+                        chave, valor = linha.split(": ", 1)
+                        meta_info[chave] = valor
+                    metas.append(meta_info)
+
+                for i, meta in enumerate(metas):
+                    print(f"{i} - {meta['Nome']} | {meta['Meta']} | Status: {meta['Status']}")
+                
+                idx = int(input("Número da meta para excluir: "))
+                del metas[idx]
+
+                with open("metas.txt", 'w', encoding="utf-8") as file:
+                    for meta in metas:
+                        for k, v in meta.items():
+                            file.write(f"{k}: {v}\n")
+                        file.write("\n")
+                print("Meta excluída com sucesso!\n")
+            except (FileNotFoundError, ValueError, IndexError):
+                print("Erro ao excluir meta.")
+        elif escolha == 0:
+            break
+        else:
+            print("Opção inválida")
+tela_inicial()            
