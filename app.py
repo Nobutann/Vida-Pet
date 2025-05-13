@@ -229,7 +229,7 @@ def deletar():
         
         with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
             for pet in pets:
-                for key, value in pets.items():
+                for key, value in pet.items():
                     file.write(f"{key}: {value}\n")
 
         print("Informações atualizadas")
