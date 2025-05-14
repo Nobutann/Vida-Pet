@@ -248,12 +248,12 @@ def registrar_evento():
         print(f"1 - Vacinação")
         print(f"2 - Consulta veterinária")
         print(f"3 - Aplicação de remédio")
-        print(f"0 - Salvar")
+        print(f"0 - Voltar")
 
         option=int(input())
         
         eventos={
-            "data":int(),
+            "data":"",
             "pet":"",
             "observações":""
         }
@@ -265,7 +265,7 @@ def registrar_evento():
                     print(f"1 - Adicione data")
                     print(f"2 - Escolha o  pet")
                     print(f"3 - Observações")
-                    print(f"0 - Voltar")
+                    print(f"0 - Salvar")
                     escolha=int(input())
                     match escolha:
                         case 1:
@@ -278,6 +278,7 @@ def registrar_evento():
                             limpar_terminal()
                             eventos["observações"]=input()
                         case 0:
+                            salvar_arquivos(eventos)
                             break
             case 2:
                 limpar_terminal()
@@ -285,7 +286,7 @@ def registrar_evento():
                     print(f"1 - Adicione data")
                     print(f"2 - Escolha o  pet")
                     print(f"3 - Observações")
-                    print(f"0 - Voltar")
+                    print(f"0 - Salvar")
                     escolha=int(input())
                     match escolha:
                         case 1:
@@ -298,6 +299,7 @@ def registrar_evento():
                             limpar_terminal()
                             eventos["observações"]=input()
                         case 0:
+                            salvar_arquivos(eventos)
                             break
             case 3:
                 limpar_terminal()
@@ -305,7 +307,7 @@ def registrar_evento():
                     print(f"1 - Adicione data")
                     print(f"2 - Escolha o  pet")
                     print(f"3 - Observações")
-                    print(f"0 - Voltar")
+                    print(f"0 - Salvar")
                     escolha=int(input())
                     match escolha:
                         case 1:
@@ -318,9 +320,9 @@ def registrar_evento():
                             limpar_terminal()
                             eventos["observações"]=input()
                         case 0:
+                            salvar_arquivos(eventos)
                             break
             case 0:
-                salvar_arquivos(eventos)
                 break
 
 
