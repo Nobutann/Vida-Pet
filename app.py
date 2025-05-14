@@ -69,7 +69,7 @@ def menu():
                                 limpar_terminal()
                                 pet["Peso"] = input()
                             case 6:
-                                salvar_arquivos(pet)
+                                salvar_dados(pet)
                                 limpar_terminal()
                                 break
                             case 0:
@@ -115,7 +115,7 @@ def menu():
             input()
             limpar_terminal()
 
-def salvar_arquivos(pet):
+def salvar_dados(pet):
     try:
         with open("dados pet.txt", 'a', newline="", encoding="utf-8") as file:
             for key, value in pet.items():
@@ -123,6 +123,10 @@ def salvar_arquivos(pet):
             file.write("\n")
     except:
         print("Erro ao salvar.")
+
+def salvar_eventos(events):
+    with open("eventos.txt", 'a', encoding="utf-8") as file:
+        file.write(events)
 def visualizar_arquivos():
     try:
         with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
@@ -207,7 +211,7 @@ def deletar():
     try:
         with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
             content = file.read().strip()
-        
+ 
         blocks = content.split("\n\n")
         pets = []
 
@@ -243,92 +247,74 @@ def deletar():
         print("Arquivo não encontrado")
 
 def registrar_evento():
-    while True:
-        print(f"Registrar evento:")
-        print(f"1 - Vacinação")
-        print(f"2 - Consulta veterinária")
-        print(f"3 - Aplicação de remédio")
-        print(f"0 - Voltar")
+    try:
+        with open("dados pet.txt", 'r', encoding="utf-8") as file:
+            content = file.read().strip()
 
-        option=int(input())
-        
-        eventos={
-            "data":"",
-            "pet":"",
-            "observações":""
-        }
-        
-        match option:
-            case 1:
-                limpar_terminal()
-                while True:
-                    print(f"1 - Adicione data")
-                    print(f"2 - Escolha o  pet")
-                    print(f"3 - Observações")
-                    print(f"0 - Salvar")
-                    escolha=int(input())
-                    match escolha:
-                        case 1:
-                            limpar_terminal()
-                            eventos["data"]=input()
-                        case 2:
-                            limpar_terminal()
-                            eventos["pet"]=input()
-                        case 3:
-                            limpar_terminal()
-                            eventos["observações"]=input()
-                        case 0:
-                            salvar_arquivos(eventos)
-                            break
-            case 2:
-                limpar_terminal()
-                while True:
-                    print(f"1 - Adicione data")
-                    print(f"2 - Escolha o  pet")
-                    print(f"3 - Observações")
-                    print(f"0 - Salvar")
-                    escolha=int(input())
-                    match escolha:
-                        case 1:
-                            limpar_terminal()
-                            eventos["data"]=input()
-                        case 2:
-                            limpar_terminal()
-                            eventos["pet"]=input()
-                        case 3:
-                            limpar_terminal()
-                            eventos["observações"]=input()
-                        case 0:
-                            salvar_arquivos(eventos)
-                            break
-            case 3:
-                limpar_terminal()
-                while True:
-                    print(f"1 - Adicione data")
-                    print(f"2 - Escolha o  pet")
-                    print(f"3 - Observações")
-                    print(f"0 - Salvar")
-                    escolha=int(input())
-                    match escolha:
-                        case 1:
-                            limpar_terminal()
-                            eventos["data"]=input()
-                        case 2:
-                            limpar_terminal()
-                            eventos["pet"]=input()
-                        case 3:
-                            limpar_terminal()
-                            eventos["observações"]=input()
-                        case 0:
-                            salvar_arquivos(eventos)
-                            break
-            case 0:
-                break
+        blocks = content.split("\n\n")
+        pets = []
 
-
-                
-        
+        for block in blocks:
+            pet = {}
+            lines = block.split("\n")
             
+            for line in lines:
+                key, value = line.split(": ", 1)
+                pet[key] = value
+            
+            pets.append(pet)
+
+        for i, pet in enumerate(pets):
+            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
+
+        try:
+            idx = int(input())
+
+            if 0 <= idx < len(pets):
+                pet = pets[idx]
+
+                while True:
+                    print("1 - Registrar vacinações")
+                    print("2 - Registrar consultas veterinárias")
+                    print("3 - Registrar aplicação de remédios")
+                    print("0 - voltar")
+
+                    try:
+                        choice = int(input())
+                        events = []
+                        match choice:
+                            case 1:
+                                limpar_terminal()
+                                while True:
+                                    print("===Vacinação===")
+                                    print("1 - Data")
+                                    print("2 - Observações")
+                                    print("3 - Salvar")
+                                    print("0 - Voltar")
+
+                                    try:
+                                        escolha = int(input())
+
+                                        match escolha:
+                                            case 1:
+                                                data = input()
+                                                events.append(data)
+                                            case 2:
+                                                observacoes = input()
+                                                events.append(observacoes)
+                                            case 3:
+                                                salvar_eventos(events)
+                                    except ValueError:
+                                        print("Valor inválido.")
+
+                    except ValueError:
+                        print("Valor inválido.")
+        except ValueError:
+            print("Valor inválido")
+
+    except FileNotFoundError:
+        print("Arquivo não existe, tente \"Adicionar\" primeiro.")
+
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
