@@ -19,11 +19,12 @@ def tela_inicial():
 
 def menu():
     while True:
-        print("1 - Adicionar")
-        print("2 - Visualizar")
-        print("3 - Editar")
-        print("4 - Excluir")
-        print("0 - Fechar Programa")
+        print(f"1 - Adicionar")
+        print(f"2 - Visualizar")
+        print(f"3 - Editar")
+        print(f"4 - Excluir")
+        print(f"5 - Registrar evento")
+        print(f"0 - Fechar Programa")
         try:
             opcao = int(input())
         
@@ -101,6 +102,9 @@ def menu():
                     deletar()
                     input()
                     limpar_terminal()
+                case 5:
+                    limpar_terminal()
+                    registrar_evento()
                 case 0:
                     limpar_terminal()
                     break
@@ -238,7 +242,91 @@ def deletar():
     except FileNotFoundError:
         print("Arquivo não encontrado")
 
+def registrar_evento():
+    while True:
+        print(f"Registrar evento:")
+        print(f"1 - Vacinação")
+        print(f"2 - Consulta veterinária")
+        print(f"3 - Aplicação de remédio")
+        print(f"0 - Salvar")
 
+        option=int(input())
+        
+        eventos={
+            "data":int(),
+            "pet":"",
+            "observações":""
+        }
+        
+        match option:
+            case 1:
+                limpar_terminal()
+                while True:
+                    print(f"1 - Adicione data")
+                    print(f"2 - Escolha o  pet")
+                    print(f"3 - Observações")
+                    print(f"0 - Voltar")
+                    escolha=int(input())
+                    match escolha:
+                        case 1:
+                            limpar_terminal()
+                            eventos["data"]=input()
+                        case 2:
+                            limpar_terminal()
+                            eventos["pet"]=input()
+                        case 3:
+                            limpar_terminal()
+                            eventos["observações"]=input()
+                        case 0:
+                            break
+            case 2:
+                limpar_terminal()
+                while True:
+                    print(f"1 - Adicione data")
+                    print(f"2 - Escolha o  pet")
+                    print(f"3 - Observações")
+                    print(f"0 - Voltar")
+                    escolha=int(input())
+                    match escolha:
+                        case 1:
+                            limpar_terminal()
+                            eventos["data"]=input()
+                        case 2:
+                            limpar_terminal()
+                            eventos["pet"]=input()
+                        case 3:
+                            limpar_terminal()
+                            eventos["observações"]=input()
+                        case 0:
+                            break
+            case 3:
+                limpar_terminal()
+                while True:
+                    print(f"1 - Adicione data")
+                    print(f"2 - Escolha o  pet")
+                    print(f"3 - Observações")
+                    print(f"0 - Voltar")
+                    escolha=int(input())
+                    match escolha:
+                        case 1:
+                            limpar_terminal()
+                            eventos["data"]=input()
+                        case 2:
+                            limpar_terminal()
+                            eventos["pet"]=input()
+                        case 3:
+                            limpar_terminal()
+                            eventos["observações"]=input()
+                        case 0:
+                            break
+            case 0:
+                salvar_arquivos(eventos)
+                break
+
+
+                
+        
+            
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
