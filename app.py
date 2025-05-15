@@ -19,11 +19,11 @@ def tela_inicial():
 
 def menu():
     while True:
-        print(f"1 - Adicionar")
-        print(f"2 - Visualizar")
-        print(f"3 - Editar")
-        print(f"4 - Excluir")
-        print(f"5 - Registrar evento")
+        print(f"1 - Adicionar informações pet")
+        print(f"2 - Visualizar pets")
+        print(f"3 - Editar pets")
+        print(f"4 - Excluir pets")
+        print(f"5 - Registrar eventos")
         print(f"0 - Fechar Programa")
         try:
             opcao = int(input())
