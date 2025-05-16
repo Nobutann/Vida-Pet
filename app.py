@@ -298,6 +298,7 @@ def registrar_evento():
                                 limpar_terminal()
                                 coletar_evento("=== Aplicação de Remédio ===", pet)
                             case 0:
+                                limpar_terminal()
                                 break
                             case _:
                                 print("Opção inválida.")
