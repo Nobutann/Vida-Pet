@@ -194,7 +194,7 @@ def editar_arquivos():
                         case _:
                             print("Inválido")
             else:
-                print("Indíce inválido")
+                print("Esse pet não existe.")
         except ValueError:
             print("Erro")
         
@@ -233,8 +233,10 @@ def deletar():
         
         try:
             idx = int(input("Número para excluir: "))
-
-            del pets[idx]
+            if 0 <= idx < len(pets):
+                del pets[idx]
+            else:
+                print("Esse pet não existe.")
         except ValueError:
             print("Valor Inválido")
         
