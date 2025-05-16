@@ -124,9 +124,12 @@ def salvar_dados(pet):
     except:
         print("Erro ao salvar.")
 
-def salvar_eventos(events):
+def salvar_eventos(events, tipo_evento):
     with open("eventos.txt", 'a', encoding="utf-8") as file:
-        file.write(events)
+        file.write(f"{tipo_evento}\n")
+        for key, value in events.items():
+            file.write(f"{key}: {value}\n")
+        file.write("\n")
 def visualizar_arquivos():
     try:
         with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
@@ -269,6 +272,7 @@ def registrar_evento():
 
         try:
             idx = int(input())
+            limpar_terminal()
 
             if 0 <= idx < len(pets):
                 pet = pets[idx]
@@ -277,16 +281,16 @@ def registrar_evento():
                     print("1 - Registrar vacinações")
                     print("2 - Registrar consultas veterinárias")
                     print("3 - Registrar aplicação de remédios")
-                    print("0 - voltar")
+                    print("0 - Voltar")
 
                     try:
                         choice = int(input())
-                        events = []
                         match choice:
                             case 1:
                                 limpar_terminal()
+
                                 while True:
-                                    print("===Vacinação===")
+                                    print("=== Vacinação ===")
                                     print("1 - Data")
                                     print("2 - Observações")
                                     print("3 - Salvar")
@@ -297,15 +301,100 @@ def registrar_evento():
 
                                         match escolha:
                                             case 1:
-                                                data = input()
-                                                events.append(data)
+                                                limpar_terminal()
+                                                date = input()
                                             case 2:
-                                                observacoes = input()
-                                                events.append(observacoes)
+                                                limpar_terminal()
+                                                obs = input()
                                             case 3:
-                                                salvar_eventos(events)
+                                                limpar_terminal()
+                                                print("Salvo com sucesso!")
+                                                tipo = "=== Vacinação ==="
+                                                events = {"Nome": pet["Nome"],
+                                                          "Data": date,
+                                                          "Observações": obs}
+                                                
+                                                salvar_eventos(events, tipo)
+                                            case 0:
+                                                limpar_terminal()
+                                                break
+                                            case _:
+                                                print("Opção inválida.")
+
                                     except ValueError:
                                         print("Valor inválido.")
+
+                            case 2:
+                                limpar_terminal()
+                                while True:
+                                    print("=== Consulta Veterinária ===")
+                                    print("1 - Data")
+                                    print("2 - Observações")
+                                    print("3 - Salvar")
+                                    print("0 - Voltar")
+                                    
+                                    try:
+                                        escolha = int(input())
+
+                                        match escolha:
+                                            case 1:
+                                                limpar_terminal()
+                                                date = input()
+                                            case 2:
+                                                limpar_terminal()
+                                                obs = input()
+                                            case 3:
+                                                limpar_terminal()
+                                                tipo = "===Consulta Veterinária==="
+                                                events = {"Nome": pet["Nome"],
+                                                          "Data": date,
+                                                          "Observação": obs}
+                                                salvar_eventos(events, tipo)
+                                            case 0:
+                                                limpar_terminal()
+                                                break
+                                            case _:
+                                                print("Opção inválida")
+                                    except ValueError:
+                                        print("Valor inválido")
+                            case 3:
+                                limpar_terminal()
+                                while True:
+                                    print("=== Aplicação de Remédios ===")
+                                    print("1 - Data")
+                                    print("2 - Observações")
+                                    print("3 - Salvar")
+                                    print("0 - Voltar")
+
+                                    try:
+                                        escolha = int(input())
+
+                                        match escolha:
+                                            case 1:
+                                                limpar_terminal()
+                                                date = input()
+                                            case 2:
+                                                limpar_terminal()
+                                                obs = input()
+                                            case 3:
+                                                limpar_terminal()
+                                                tipo = "===Aplicação de Remédios==="
+                                                events = {"Nome": pet["Nome"],
+                                                          "Data": date,
+                                                          "Observações": obs}
+                                                salvar_eventos(events, tipo)
+                                            case 0:
+                                                limpar_terminal()
+                                                break
+                                            case _:
+                                                print("Opção inválida")
+                                    except ValueError:
+                                        print("Valor inválido.")
+                            case 0:
+                                limpar_terminal()
+                                break
+                    except ValueError:
+                        print("Valor inválido.")
 
                     except ValueError:
                         print("Valor inválido.")
