@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Inicial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="menu-container">
+        <header>
+            <h1>Menu Principal</h1>
+        </header>
+
+        <nav>
+            <ul class="buttons">
+                <li><a href="/adicionar" class="menu-btn">Adicionar</a></li>
+                <li><a href="/visualizar" class="menu-btn">Visualizar</a></li>
+                <li><a href="/editar" class="menu-btn">Editar</a></li>
+                <li><a href="/excluir" class="menu-btn">Registrar Evento</a></li>
+                <li><a href="/" class="menu-btn sair">Fechar</a></li>
+            </ul>
+        </nav>
+    </main>
+</body>
+</html>
