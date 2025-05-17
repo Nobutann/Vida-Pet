@@ -37,10 +37,10 @@ def visualizar():
     with open("dados pet.txt", 'r', encoding="utf-8") as file:
         pet = {}
         for line in file:
-            line = line.stip()
+            line = line.strip()
             if line:
                 key, value = line.split(":", 1)
-                pet[key.stip()] = value.strip()
+                pet[key.strip()] = value.strip()
             else:
                 if pet:
                     pets.append(pet)

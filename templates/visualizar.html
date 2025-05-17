@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1 class="titulo">Pets Cadastrados</h1>
+
+        {% if pets %}
+            <section class="pet-lista">
+                {% for pet in pets %}
+                    <article class="pet-card">
+                        {% for key, value in pet.items() %}
+                            <p><strong>{{ key }}:</strong> {{ value }}</p>
+                        {% endfor %}
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <p class="subtitulo">Nenhum pet cadastro ainda.</p>
+        {% endif %}
+
+        <a href="{{ url_for('menu') }}" class="botao">Voltar</a>
+    </main>    
+</body>
+</html>
