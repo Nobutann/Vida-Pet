@@ -31,5 +31,24 @@ def adicionar():
     
     return render_template("adicionar.html")
 
+@app.route("/visualizar")
+def visualizar():
+    pets = []
+    with open("dados pet.txt", 'r', encoding="utf-8") as file:
+        pet = {}
+        for line in file:
+            line = line.stip()
+            if line:
+                key, value = line.split(":", 1)
+                pet[key.stip()] = value.strip()
+            else:
+                if pet:
+                    pets.append(pet)
+                    pet = {}
+        if pet:
+            pets.append(pet)
+
+    return render_template("visualizar.html", pets=pets)
+
 if __name__ == "__main__":
     app.run(debug=True)
