@@ -22,7 +22,7 @@ def menu():
         print(f"2 - Visualizar")
         print(f"3 - Editar")
         print(f"4 - Excluir")
-        print(f"5 - Registrar Evento")
+        print(f"5 - Registrar evento")
         print(f"6 - Gerar Sugestões Personalizadas de Cuidados")
         print(f"0 - Fechar Programa")
         try:
@@ -424,10 +424,28 @@ def sugestao_selecionada(tipo_sugestao, pet):
         (data_atual.month, data_atual.day) < (data_nascimento.month, data_nascimento.day)
     )
 
-    especie = pet["Espécie"].capitalize()
+    especie_entrada = pet["Espécie"].strip().capitalize()
+
+    especie_mapa = {
+        "Cachorro": "Cão",
+        "Cão": "Cão",
+        "Gato": "Gato",
+        "Coelho": "Coelho",
+        "Hamster": "Hamster",
+        "Ave": "Ave"
+    }
+
+    especie = especie_mapa.get(especie_entrada, "Desconhecido")
     faixa = ""
 
-    if especie == "Cachorro" or especie == "Gato":
+    if especie == "Desconhecido":
+        limpar_terminal()
+        print(f"Espécie '{especie_entrada}' não reconhecida.")
+        input("\nPressione Enter para continuar...")
+        limpar_terminal()
+        return
+
+    if especie in ["Cão", "Gato"]:
         if idade < 1:
             faixa = "Filhote"
         elif idade < 7:
@@ -457,7 +475,7 @@ def sugestao_selecionada(tipo_sugestao, pet):
             faixa = "Idoso"
 
     sugestoes = {
-        "Cachorro": {
+        "Cão": {
             "Filhote": {
                 "=== Brinquedos Ideais ===": "Mordedores de borracha, brinquedos macios",
                 "=== Alimentos Recomendados ===": "Ração premium para filhotes, rica em DHA",
@@ -561,7 +579,15 @@ def sugestao_selecionada(tipo_sugestao, pet):
 
     limpar_terminal()
     print(f"Espécie: {especie}")
-    print(f"Idade: {idade} anos ({faixa})")
+    
+    if idade < 1:
+        meses = (data_atual.year - data_nascimento.year) * 12 + (data_atual.month - data_nascimento.month)
+        if data_atual.day < data_nascimento.day:
+            meses -= 1
+        print(f"Idade: {meses} meses ({faixa})")
+    else:
+        print(f"Idade: {idade} anos ({faixa})")
+
     print(tipo_sugestao)
     print("\nSugestão personalizada:")
     try:
