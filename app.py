@@ -57,7 +57,7 @@ def editar():
         newPet = {"Nome": request.form.get("nome"),
                   "Espécie": request.form.get("especie"),
                   "Raça": request.form.get("raca"),
-                  "Data de nascimento": request.form.get("data_nascimento"),
+                  "Data de Nascimento": request.form.get("data_nascimento"),
                   "Peso": request.form.get("peso")}
         
         with open("dados pet.txt", 'r', encoding="utf-8") as file:
