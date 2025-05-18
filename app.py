@@ -1,12 +1,30 @@
-import os
+import os, time, datetime
+def tela_inicial():
+    start = \
+    """       ██╗   ██╗██╗██████╗  █████╗     ██████╗ ███████╗████████╗
+       ██║   ██║██║██╔══██╗██╔══██╗    ██╔══██╗██╔════╝╚══██╔══╝
+       ██║   ██║██║██║  ██║███████║    ██████╔╝█████╗     ██║   
+       ╚██╗ ██╔╝██║██║  ██║██╔══██║    ██╔═══╝ ██╔══╝     ██║   
+        ╚████╔╝ ██║██████╔╝██║  ██║    ██║     ███████╗   ██║   
+         ╚═══╝  ╚═╝╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚══════╝   ╚═╝"""
+
+    for line in start.splitlines():
+        print(line)
+        time.sleep(0.2)
+
+    input("\nPressione Enter para continuar...")
+    limpar_terminal()
+    menu()
 
 def menu():
     while True:
-        print("1 - Adicionar")
-        print("2 - Visualizar")
-        print("3 - Editar")
-        print("4 - Excluir")
-        print("0 - Fechar Programa")
+        print(f"1 - Adicionar")
+        print(f"2 - Visualizar")
+        print(f"3 - Editar")
+        print(f"4 - Excluir")
+        print(f"5 - Registrar Evento")
+        print(f"6 - Gerar Sugestões Personalizadas de Cuidados")
+        print(f"0 - Fechar Programa")
         try:
             opcao = int(input())
         
@@ -51,7 +69,7 @@ def menu():
                                 limpar_terminal()
                                 pet["Peso"] = input()
                             case 6:
-                                salvar_arquivos(pet)
+                                salvar_dados(pet)
                                 limpar_terminal()
                                 break
                             case 0:
@@ -84,6 +102,12 @@ def menu():
                     deletar()
                     input()
                     limpar_terminal()
+                case 5:
+                    limpar_terminal()
+                    registrar_evento()
+                case 6:
+                    limpar_terminal()
+                    selecionar_sugestao()
                 case 0:
                     limpar_terminal()
                     break
@@ -94,7 +118,7 @@ def menu():
             input()
             limpar_terminal()
 
-def salvar_arquivos(pet):
+def salvar_dados(pet):
     try:
         with open("dados pet.txt", 'a', newline="", encoding="utf-8") as file:
             for key, value in pet.items():
@@ -102,6 +126,13 @@ def salvar_arquivos(pet):
             file.write("\n")
     except:
         print("Erro ao salvar.")
+
+def salvar_eventos(events, tipo_evento):
+    with open("eventos.txt", 'a', encoding="utf-8") as file:
+        file.write(f"{tipo_evento}\n")
+        for key, value in events.items():
+            file.write(f"{key}: {value}\n")
+        file.write("\n")
 def visualizar_arquivos():
     try:
         with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
@@ -127,7 +158,7 @@ def editar_arquivos():
             pets.append(pet)
         
         for i, pet in enumerate(pets):
-            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
+            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
 
         try:
             idx = int(input("Número para editar: "))
@@ -166,7 +197,7 @@ def editar_arquivos():
                         case _:
                             print("Inválido")
             else:
-                print("Indíce inválido")
+                print("Esse pet não existe.")
         except ValueError:
             print("Erro")
         
@@ -186,7 +217,7 @@ def deletar():
     try:
         with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
             content = file.read().strip()
-        
+ 
         blocks = content.split("\n\n")
         pets = []
 
@@ -201,18 +232,20 @@ def deletar():
             pets.append(pet)
 
         for i, pet in enumerate(pets):
-            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
+            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
         
         try:
             idx = int(input("Número para excluir: "))
-
-            del pets[idx]
+            if 0 <= idx < len(pets):
+                del pets[idx]
+            else:
+                print("Esse pet não existe.")
         except ValueError:
             print("Valor Inválido")
         
         with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
             for pet in pets:
-                for key, value in pets.items():
+                for key, value in pet.items():
                     file.write(f"{key}: {value}\n")
 
         print("Informações atualizadas")
@@ -221,8 +254,326 @@ def deletar():
     except FileNotFoundError:
         print("Arquivo não encontrado")
 
+def registrar_evento():
+    date = ""
+    obs = ""
+    try:
+        with open("dados pet.txt", 'r', encoding="utf-8") as file:
+            content = file.read().strip()
+
+        blocks = content.split("\n\n")
+        pets = []
+
+        for block in blocks:
+            pet = {}
+            lines = block.split("\n")
+            
+            for line in lines:
+                key, value = line.split(": ", 1)
+                pet[key] = value
+            
+            pets.append(pet)
+
+        for i, pet in enumerate(pets):
+            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
+
+        try:
+            idx = int(input())
+            limpar_terminal()
+
+            if 0 <= idx < len(pets):
+                pet = pets[idx]
+
+                while True:
+                    print("1 - Registrar vacinações")
+                    print("2 - Registrar consultas veterinárias")
+                    print("3 - Registrar aplicação de remédios")
+                    print("0 - Voltar")
+
+                    try:
+                        choice = int(input())
+                        match choice:
+                            case 1:
+                                limpar_terminal()
+                                coletar_evento("=== Vacinação ===", pet)
+                            case 2:
+                                limpar_terminal()
+                                coletar_evento("=== Consulta Veterinária ===", pet)
+                            case 3:
+                                limpar_terminal()
+                                coletar_evento("=== Aplicação de Remédio ===", pet)
+                            case 0:
+                                limpar_terminal()
+                                break
+                            case _:
+                                print("Opção inválida.")
+                    except ValueError:
+                        print("Valor inválido.")
+        except ValueError:
+            print("Valor inválido")
+
+    except FileNotFoundError:
+        print("Arquivo não existe, tente \"Adicionar\" primeiro.")
+    
+def coletar_evento(tipo_evento, pet):
+    date = ""
+    obs = ""
+
+    while True:
+        print(tipo_evento)
+        print("1 - Data")
+        print("2 - Observações")
+        print("3 - Salvar")
+        print("0 - Voltar")
+        
+        try:
+            escolha = int(input())
+
+            match escolha:
+                case 1:
+                    limpar_terminal()
+                    date = input()
+                case 2:
+                    limpar_terminal()
+                    obs = input()
+                case 3:
+                    limpar_terminal()
+                    if date and obs:
+                        print("Salvo com sucesso!")
+                        events = {"Nome": pet["Nome"],
+                                  "Data": date,
+                                  "Observações": obs}
+                        salvar_eventos(events, tipo_evento)
+                        break
+                    else:
+                        print("Preencha todos os campos antes de salvar.")
+                case 0:
+                    limpar_terminal()
+                    break
+                case _:
+                    print("Opção inválida.")
+        except ValueError:
+            print("Valor inválido.")
+
+def selecionar_sugestao():
+    try:
+        with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
+            content = file.read().strip()
+
+        blocks = content.split("\n\n")
+        pets = []
+
+        for block in blocks:
+            pet = {}
+            lines = block.split("\n")
+            for line in lines:
+                key, value = line.split(": ", 1)
+                pet[key] = value
+            
+            pets.append(pet)
+        
+        for i, pet in enumerate(pets):
+            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
+
+        try:
+            idx = int(input())
+            limpar_terminal()
+
+            if 0 <= idx < len(pets):
+                pet = pets[idx]
+
+                while True:
+                    print("1 - Brinquedos Ideais")
+                    print("2 - Alimentos Recomendados")
+                    print("3 - Exercícios Adequados")
+                    print("4 - Outros Cuidados")
+                    print("0 - Voltar")
+
+                    option = int(input())
+
+                    match option:
+                        case 1:
+                            limpar_terminal()
+                            sugestao_selecionada("=== Brinquedos Ideais ===", pet) 
+                        case 2:
+                            limpar_terminal()
+                            sugestao_selecionada("=== Alimentos Recomendados ===", pet)
+                        case 3:
+                            limpar_terminal()
+                            sugestao_selecionada("=== Exercícios Adequados ===", pet)
+                        case 4:
+                            limpar_terminal()
+                            sugestao_selecionada("=== Outros Cuidados ===", pet)
+                        case 0:
+                            limpar_terminal()
+                            break
+                        case _:
+                            print("Opção Inválida.")
+
+        except ValueError:
+            print("Valor Inválido.")
+    except ValueError:
+            print("Valor Inválido.")
+
+def sugestao_selecionada(tipo_sugestao, pet):
+    data_nascimento = pet["Data de nascimento"]
+    dia, mes, ano = map(int, data_nascimento.split('/'))
+    data_nascimento = datetime.datetime(ano, mes, dia)
+    data_atual = datetime.datetime.now()
+    idade = data_atual.year - data_nascimento.year - (
+        (data_atual.month, data_atual.day) < (data_nascimento.month, data_nascimento.day)
+    )
+
+    especie = pet["Espécie"].capitalize()
+    faixa = ""
+
+    if especie == "Cachorro" or especie == "Gato":
+        if idade < 1:
+            faixa = "Filhote"
+        elif idade < 7:
+            faixa = "Adulto"
+        else:
+            faixa = "Idoso"
+    elif especie == "Coelho":
+        if idade < 1 and (data_atual - data_nascimento).days < 183:
+            faixa = "Filhote"
+        elif idade < 5:
+            faixa = "Adulto"
+        else:
+            faixa = "Idoso"
+    elif especie == "Hamster":
+        if idade < 1 and (data_atual - data_nascimento).days < 183:
+            faixa = "Filhote"
+        elif idade < 2:
+            faixa = "Adulto"
+        else:
+            faixa = "Idoso"
+    elif especie == "Ave":
+        if idade < 1:
+            faixa = "Filhote"
+        elif idade < 8:
+            faixa = "Adulto"
+        else:
+            faixa = "Idoso"
+
+    sugestoes = {
+        "Cachorro": {
+            "Filhote": {
+                "=== Brinquedos Ideais ===": "Mordedores de borracha, brinquedos macios",
+                "=== Alimentos Recomendados ===": "Ração premium para filhotes, rica em DHA",
+                "=== Exercícios Adequados ===": "Caminhadas leves, brincadeiras curtas",
+                "=== Outros Cuidados ===": "Vacinação, vermifugação, socialização precoce"
+            },
+            "Adulto": {
+                "=== Brinquedos Ideais ===": "Bola, frisbee, brinquedos interativos",
+                "=== Alimentos Recomendados ===": "Ração balanceada para adultos",
+                "=== Exercícios Adequados ===": "Caminhadas diárias, adestramento, correr",
+                "=== Outros Cuidados ===": "Controle de pulgas/carrapatos, check-ups"
+            },
+            "Idoso": {
+                "=== Brinquedos Ideais ===": "Brinquedos mentais, pelúcias",
+                "=== Alimentos Recomendados ===": "Ração sênior com condroitina/glucosamina",
+                "=== Exercícios Adequados ===": "Caminhadas leves, estimulação mental",
+                "=== Outros Cuidados ===": "Avaliação ortopédica, cuidados dentários"
+            }
+        },
+        "Gato": {
+            "Filhote": {
+                "=== Brinquedos Ideais ===": "Varinhas com penas, bolinhas leves",
+                "=== Alimentos Recomendados ===": "Ração para filhotes rica em proteínas e taurina",
+                "=== Exercícios Adequados ===": "Subir e descer móveis, caça simulada",
+                "=== Outros Cuidados ===": "Castração, vacinação, arranhadores"
+            },
+            "Adulto": {
+                "=== Brinquedos Ideais ===": "Brinquedos interativos, laser, túneis",
+                "=== Alimentos Recomendados ===": "Ração premium com controle de peso",
+                "=== Exercícios Adequados ===": "Brincadeiras diárias, enriquecimento ambiental",
+                "=== Outros Cuidados ===": "Escovação de pelos, vermifugação"
+            },
+            "Idoso": {
+                "=== Brinquedos Ideais ===": "Brinquedos lentos, almofadas aromatizadas",
+                "=== Alimentos Recomendados ===": "Ração sênior de fácil digestão",
+                "=== Exercícios Adequados ===": "Atividades leves, observação em janelas seguras",
+                "=== Outros Cuidados ===": "Monitoramento renal, cuidados articulares"
+            }
+        },
+        "Coelho": {
+            "Filhote": {
+                "=== Brinquedos Ideais ===": "Tubos de papelão, bolas de feno",
+                "=== Alimentos Recomendados ===": "Feno à vontade, ração para filhotes, vegetais leves",
+                "=== Exercícios Adequados ===": "Espaço seguro para pulos, exploração supervisionada",
+                "=== Outros Cuidados ===": "Castração precoce, socialização"
+            },
+            "Adulto": {
+                "=== Brinquedos Ideais ===": "Túnel de tecido, blocos para roer",
+                "=== Alimentos Recomendados ===": "Feno, verduras frescas, ração equilibrada",
+                "=== Exercícios Adequados ===": "Tempo diário fora da gaiola, enriquecimento ambiental",
+                "=== Outros Cuidados ===": "Vacinação (VHD/Mixomatose), controle de unhas"
+            },
+            "Idoso": {
+                "=== Brinquedos Ideais ===": "Brinquedos calmos, mordedores leves",
+                "=== Alimentos Recomendados ===": "Feno, vegetais macios, ração sênior leve",
+                "=== Exercícios Adequados ===": "Movimentos suaves, acesso fácil aos recursos",
+                "=== Outros Cuidados ===": "Monitoramento dental, avaliação articular"
+            }
+        },
+        "Hamster": {
+            "Filhote": {
+                "=== Brinquedos Ideais ===": "Roda de exercícios, túneis",
+                "=== Alimentos Recomendados ===": "Ração para roedores, pequenas frutas e legumes",
+                "=== Exercícios Adequados ===": "Esconderijos, escalada leve",
+                "=== Outros Cuidados ===": "Limpeza diária da gaiola, cuidado com temperatura"
+            },
+            "Adulto": {
+                "=== Brinquedos Ideais ===": "Labirintos, blocos para roer",
+                "=== Alimentos Recomendados ===": "Mix de sementes, proteína ocasional (ovo cozido)",
+                "=== Exercícios Adequados ===": "Atividades noturnas, exploração em ambiente seguro",
+                "=== Outros Cuidados ===": "Observação de comportamento, rotação de brinquedos"
+            },
+            "Idoso": {
+                "=== Brinquedos Ideais ===": "Materiais suaves, brinquedos com pouco esforço",
+                "=== Alimentos Recomendados ===": "Alimento macio, menos sementes oleaginosas",
+                "=== Exercícios Adequados ===": "Movimentação reduzida, espaço acolchoado",
+                "=== Outros Cuidados ===": "Acesso fácil à comida e água, supervisão veterinária"
+            }
+        },
+        "Ave": {
+            "Filhote": {
+                "=== Brinquedos Ideais ===": "Espelhos, guizos, balanços",
+                "=== Alimentos Recomendados ===": "Ração extrusada para filhotes, frutas e verduras",
+                "=== Exercícios Adequados ===": "Voo supervisionado (se possível), interação social",
+                "=== Outros Cuidados ===": "Anilhamento, adaptação gradual ao ambiente"
+            },
+            "Adulto": {
+                "=== Brinquedos Ideais ===": "Brinquedos coloridos, desafios cognitivos",
+                "=== Alimentos Recomendados ===": "Ração extrusada balanceada, frutas, sementes com moderação",
+                "=== Exercícios Adequados ===": "Voo diário, socialização com humanos/outros pássaros",
+                "=== Outros Cuidados ===": "Banho de sol, enriquecimento com galhos naturais"
+            },
+            "Idoso": {
+                "=== Brinquedos Ideais ===": "Brinquedos com texturas variadas, de fácil acesso",
+                "=== Alimentos Recomendados ===": "Ração leve, alimentos fáceis de digerir",
+                "=== Exercícios Adequados ===": "Exercícios suaves com supervisão",
+                "=== Outros Cuidados ===": "Avaliações regulares, prevenção de bico e penas"
+            }
+        }
+    }
+
+    limpar_terminal()
+    print(f"Espécie: {especie}")
+    print(f"Idade: {idade} anos ({faixa})")
+    print(tipo_sugestao)
+    print("\nSugestão personalizada:")
+    try:
+        sugestao = sugestoes[especie][faixa][tipo_sugestao]
+        print(f"> {sugestao}")
+    except KeyError:
+        print("Informação indisponível.")
+
+    input("\nPressione Enter para continuar...")
+    limpar_terminal()
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-menu()
+tela_inicial()
