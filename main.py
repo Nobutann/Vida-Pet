@@ -1,4 +1,5 @@
 import os, time
+from datetime import datetime
 
 def tela_inicial():
     start = \
@@ -19,69 +20,25 @@ def tela_inicial():
 
 def menu():
     while True:
-        print(f"1 - Adicionar")
-        print(f"2 - Visualizar")
-        print(f"3 - Editar")
-        print(f"4 - Excluir")
-        print(f"5 - Registrar evento")
-        print(f"0 - Fechar Programa")
+        print("1 - Adicionar")
+        print("2 - Visualizar")
+        print("3 - Editar")
+        print("4 - Excluir")
+        print("5 - Registrar evento")
+        print("6 - Registrar metas")
+        print("0 - Fechar Programa")
         try:
             opcao = int(input())
         
             match opcao:
                 case 1:
                     limpar_terminal()
-                    pet = {
-                        "Nome": "",
-                        "Espécie": "",
-                        "Raça": "",
-                        "Data de nascimento": "",
-                        "Peso": ""
-                    }
-
-                    while True:
-                        print("1 - Adicionar nome")
-                        print("2 - Adicionar espécie")
-                        print("3 - Adicionar raça")
-                        print("4 - Adicionar data de nascimento")
-                        print("5 - Adicionar peso")
-                        print("6 - Salvar")
-                        print("0 - Voltar")
-                        try:
-                            add = int(input())
-                        except ValueError:
-                            print("Inválido")
-                            continue
-                        match add:
-                            case 1:
-                                limpar_terminal()
-                                pet["Nome"]= input()
-                            case 2:
-                                limpar_terminal()
-                                pet["Espécie"] = input()
-                            case 3:
-                                limpar_terminal()
-                                pet["Raça"] = input()
-                            case 4:
-                                limpar_terminal()
-                                pet["Data de nascimento"] = input()
-                            case 5:
-                                limpar_terminal()
-                                pet["Peso"] = input()
-                            case 6:
-                                salvar_dados(pet)
-                                limpar_terminal()
-                                break
-                            case 0:
-                                limpar_terminal()
-                                break
-                            case _:
-                                print("Seleção inválida")
+                    adicionar_pet()
                 case 2:
                     limpar_terminal()
                     while True:
                         visualizar_arquivos()
-                        print("\nClique \"0\" para voltar")
+                        print('\nClique "0" para voltar')
                         try:
                             voltar = int(input())
                         except ValueError:
@@ -105,6 +62,9 @@ def menu():
                 case 5:
                     limpar_terminal()
                     registrar_evento()
+                case 6:
+                    limpar_terminal()
+                    pass
                 case 0:
                     limpar_terminal()
                     break
@@ -115,9 +75,56 @@ def menu():
             input()
             limpar_terminal()
 
+def adicionar_pet():
+    pet = {"Nome": "",
+           "Espécie": "",
+           "Raça": "",
+           "Data de nascimento": "",
+           "Peso": ""
+            }
+
+    while True:
+        print("1 - Adicionar nome")
+        print("2 - Adicionar espécie")
+        print("3 - Adicionar raça")
+        print("4 - Adicionar data de nascimento")
+        print("5 - Adicionar peso")
+        print("6 - Salvar")
+        print("0 - Voltar")
+        try:
+            add = int(input())
+        except ValueError:
+            print("Inválido")
+            continue
+        match add:
+            case 1:
+                limpar_terminal()
+                pet["Nome"]= input()
+            case 2:
+                limpar_terminal()
+                pet["Espécie"] = input()
+            case 3:
+                limpar_terminal()
+                pet["Raça"] = input()
+            case 4:
+                limpar_terminal()
+                pet["Data de nascimento"] = input()
+            case 5:
+                limpar_terminal()
+                pet["Peso"] = input()
+            case 6:
+                salvar_dados(pet)
+                limpar_terminal()
+                break
+            case 0:
+                limpar_terminal()
+                break
+            case _:
+                print("Seleção inválida")
+
 def salvar_dados(pet):
     try:
-        with open("dados pet.txt", 'a', newline="", encoding="utf-8") as file:
+        with open("dados pet.txt", 'a', encoding="utf-8") as file:
             for key, value in pet.items():
                 file.write(f"{key}: {value}\n")
             file.write("\n")
@@ -130,10 +137,15 @@ def salvar_eventos(events, tipo_evento):
         for key, value in events.items():
             file.write(f"{key}: {value}\n")
         file.write("\n")
+
+def salvar_metas(metas):
+    with open("metas.txt", 'a', encoding="utf-8") as file:
+        pass
 def visualizar_arquivos():
     try:
-        with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
-            print(file.read())
+        with open("dados pet.txt", 'r', encoding="utf-8") as file:
+            content = file.read().strip()
+            print(content)
     except FileNotFoundError:
         print("Não existe nenhum arquivo ainda, tente utilizar o \"Adicionar\" primeiro.")
 
@@ -351,6 +363,50 @@ def coletar_evento(tipo_evento, pet):
                     print("Opção inválida.")
         except ValueError:
             print("Valor inválido.")
+
+def metas():
+    while True:
+        print("=== Defina uma meta ===")
+        print("1 - Definir")
+        print("2 - Salvar")
+        print("0 - Voltar")
+
+        try:
+            choice = int(input())
+        except ValueError:
+            print("valor inválido")
+        
+        match choice:
+            case 1:
+                limpar_terminal()
+                with open("dados pet.txt", 'r', encoding="utf-8") as file:
+                    content = file.read().strip()
+
+                blocks = content.split("\n\n")
+                pets = []
+
+                for block in blocks:
+                    pet = {}
+                    lines = block.split("\n")
+
+                    for line in lines:
+                        key, value = line.split(": ", 1)
+                        pet[key] = value
+
+                pets.append(pet)
+
+                for i, pets in enumerate(pets):
+                    print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
+
+                idx = int(input())
+                limpar_terminal()
+                
+                if 0 <= idx < len(pets):
+                    print(f"Meta para {pet["Nome"]}:")
+                    meta = input()
+                else:
+                    print("Esse pet não existe.")
+
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
