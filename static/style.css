@@ -209,3 +209,18 @@ strong {
     box-shadow: 0 4px 10px rgba(244, 143, 177, 0.4);
     text-align: left;
 }
+
+.pet-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pet-card .form-group {
+    margin-bottom: 10px;
+}
+
+.pet-card input {
+    align-self: center;
+    margin-top: 12px;
+}

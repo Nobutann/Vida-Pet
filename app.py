@@ -50,5 +50,41 @@ def visualizar():
 
     return render_template("visualizar.html", pets=pets)
 
+@app.route("/editar", methods=["GET", "POST"])
+def editar():
+    if request.method == "POST":
+        idx = int(request.form.get("idx"))
+        newPet = {"Nome": request.form.get("nome"),
+                  "Espécie": request.form.get("especie"),
+                  "Raça": request.form.get("raca"),
+                  "Data de nascimento": request.form.get("data_nascimento"),
+                  "Peso": request.form.get("peso")}
+        
+        with open("dados pet.txt", 'r', encoding="utf-8") as file:
+            blocks = file.read().strip().split("\n\n")
+
+        blocks[idx] = "\n".join([f"{key}: {value}" for key, value in newPet.items()])
+
+        with open("dados pet.txt", 'w', encoding="utf-8") as file:
+            file.write("\n\n".join(blocks) + "\n\n")
+        
+        return redirect(url_for("menu"))
+    
+    pets = []
+    with open("dados pet.txt", 'r', encoding="utf-8") as file:
+        content = file.read().strip()
+        blocks = content.split("\n\n")
+
+        for block in blocks:
+            pet = {}
+            lines = block.strip().split("\n")
+            for line in lines():
+                if ": " in line:
+                    key, value = line.split(": ", 1)
+                    pet[key] = value
+
+            pets.append(pet)
+
+    return render_template("editar.html", pets=pets)
 if __name__ == "__main__":
     app.run(debug=True)
