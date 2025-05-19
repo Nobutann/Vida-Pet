@@ -31,52 +31,7 @@ def menu():
             match opcao:
                 case 1:
                     limpar_terminal()
-                    pet = {
-                        "Nome": "",
-                        "Espécie": "",
-                        "Raça": "",
-                        "Data de nascimento": "",
-                        "Peso": ""
-                    }
-
-                    while True:
-                        print("1 - Adicionar nome")
-                        print("2 - Adicionar espécie")
-                        print("3 - Adicionar raça")
-                        print("4 - Adicionar data de nascimento")
-                        print("5 - Adicionar peso")
-                        print("6 - Salvar")
-                        print("0 - Voltar")
-                        try:
-                            add = int(input())
-                        except ValueError:
-                            print("Inválido")
-                            continue
-                        match add:
-                            case 1:
-                                limpar_terminal()
-                                pet["Nome"]= input()
-                            case 2:
-                                limpar_terminal()
-                                pet["Espécie"] = input()
-                            case 3:
-                                limpar_terminal()
-                                pet["Raça"] = input()
-                            case 4:
-                                limpar_terminal()
-                                pet["Data de nascimento"] = input()
-                            case 5:
-                                limpar_terminal()
-                                pet["Peso"] = input()
-                            case 6:
-                                salvar_dados(pet)
-                                limpar_terminal()
-                                break
-                            case 0:
-                                limpar_terminal()
-                                break
-                            case _:
-                                print("Seleção inválida")
+                    adicionar()
                 case 2:
                     limpar_terminal()
                     while True:
@@ -95,12 +50,10 @@ def menu():
                 case 3:
                     limpar_terminal()
                     editar_arquivos()
-                    input()
                     limpar_terminal()
                 case 4:
                     limpar_terminal()
                     deletar()
-                    input()
                     limpar_terminal()
                 case 5:
                     limpar_terminal()
@@ -117,6 +70,60 @@ def menu():
             print("Valor inválido")
             input()
             limpar_terminal()
+
+def adicionar():
+    pet = {"Nome": "",
+           "Espécie": "",
+           "Raça": "",
+           "Data de nascimento": "",
+           "Peso": ""}
+
+    while True:
+        print("1 - Adicionar nome")
+        print("2 - Adicionar espécie")
+        print("3 - Adicionar raça")
+        print("4 - Adicionar data de nascimento")
+        print("5 - Adicionar peso")
+        print("6 - Salvar")
+        print("0 - Voltar")
+        try:
+            add = int(input())
+        except ValueError:
+            print("Inválido")
+            continue
+        match add:
+            case 1:
+                limpar_terminal()
+                pet["Nome"]= input()
+            case 2:
+                limpar_terminal()
+                pet["Espécie"] = input()
+            case 3:
+                limpar_terminal()
+                pet["Raça"] = input()
+            case 4:
+                limpar_terminal()
+                while True:
+                    print("Insira no formato (dd/mm/aaaa)")
+                    data = input()
+                    try:
+                        datetime.datetime.strptime(data, "%d/%m/%Y")
+                        pet["Data de nascimento"] = data
+                    except ValueError:
+                        print("Formato inválido. Use dd/mm/aaaa")
+
+            case 5:
+                limpar_terminal()
+                pet["Peso"] = input()
+            case 6:
+                salvar_dados(pet)
+                limpar_terminal()
+                break
+            case 0:
+                limpar_terminal()
+                break
+            case _:
+                print("Seleção inválida")
 
 def salvar_dados(pet):
     try:
@@ -161,8 +168,8 @@ def editar_arquivos():
             print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
 
         try:
-            idx = int(input("Número para editar: "))
-            
+            idx = int(input("Pet para editar: "))
+
             if 0 <= idx < len(pets):
                 pet = pets[idx]
                 while True:
@@ -172,7 +179,7 @@ def editar_arquivos():
                     print("3 - Editar raça")
                     print("4 - Editar data de nascimento")
                     print("5 - Editar peso")
-                    print("0 - Salvar")
+                    print("0 - Salvar e voltar")
 
                     option = int(input())
 
@@ -207,9 +214,6 @@ def editar_arquivos():
                     file.write(f"{key}: {value}\n")
                 file.write("\n")
 
-        print("Informações atualizadas")
-        print("Pressione Enter para continuar...")
-
     except FileNotFoundError:
         print("Arquivo não existe")    
 
@@ -233,23 +237,24 @@ def deletar():
 
         for i, pet in enumerate(pets):
             print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
-        
-        try:
-            idx = int(input("Número para excluir: "))
+
+        print("Escolha o pet")
+        print('Pressione "V" para voltar')
+
+        answer = input()
+        if answer.lower() == "v":
+            pass
+        else:
+            idx = int(answer)
             if 0 <= idx < len(pets):
                 del pets[idx]
             else:
                 print("Esse pet não existe.")
-        except ValueError:
-            print("Valor Inválido")
         
         with open("dados pet.txt", 'w', newline="", encoding="utf-8") as file:
             for pet in pets:
                 for key, value in pet.items():
                     file.write(f"{key}: {value}\n")
-
-        print("Informações atualizadas")
-        print("Pressione Enter para continuar...")
     
     except FileNotFoundError:
         print("Arquivo não encontrado")
@@ -378,7 +383,6 @@ def selecionar_sugestao():
         try:
             idx = int(input())
             limpar_terminal()
-
             if 0 <= idx < len(pets):
                 pet = pets[idx]
 
