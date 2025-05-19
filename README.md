@@ -60,8 +60,8 @@ Ao iniciar o sistema, aparecerá um menu assim:
 ```
 Para usar, digite o número correspondente à opção desejada e pressione Enter.
 
-1. **Adicionar**: Cadastre um novo pet no sistema.
-    _Cadastre todas as informações do pet, sem faltar **nenhuma**_
+1 - **Adicionar**: Cadastre um novo pet no sistema.
+    - Cadastre as informações sem faltar **nenhuma**.
 
 2 - **Visualizar**: Veja a lista dos pets cadastrados e seus detalhes.
 
