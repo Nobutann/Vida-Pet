@@ -45,7 +45,7 @@ Os dados são armazenados localmente em arquivos `.txt`:
 
 ---
 
-## ✨ Exemplos de uso
+## Exemplos de uso
 
 Ao iniciar o sistema, aparecerá um menu assim:
 ```plaintext
