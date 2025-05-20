@@ -25,7 +25,7 @@ Os dados são armazenados localmente em arquivos `.txt`:
 
 ## Como usar
 
-1. Clone este repositório ou copie os arquivos do projeto.  
+1. Copie os arquivos do projeto.  
 2. Execute o script principal.
 3. Use o menu para navegar entre as funcionalidades.
 
