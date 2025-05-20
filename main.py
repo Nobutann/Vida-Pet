@@ -132,7 +132,7 @@ def adicionar():
 
 def salvar_dados(pet):
     try:
-        with open("dados pet.txt", 'a', encoding="utf-8") as file:
+        with open("dados pet.txt", 'a', encoding="utf-8", newline="") as file:
             for key, value in pet.items():
                 file.write(f"{key}: {value}\n")
             file.write("\n")
@@ -170,7 +170,7 @@ def editar_arquivos():
             pets.append(pet)
         
         for i, pet in enumerate(pets):
-            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
+            print(f"{i} - {pet['Nome']} ({pet['Espécie']})")
 
         try:
             idx = int(input("Pet para editar: "))
@@ -241,7 +241,7 @@ def deletar():
             pets.append(pet)
 
         for i, pet in enumerate(pets):
-            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
+            print(f"{i} - {pet['Nome']} ({pet['Espécie']})")
 
         print("Escolha o pet")
         print('Pressione "V" para voltar')
@@ -250,7 +250,7 @@ def deletar():
         if answer.lower() == "v":
             pass
         else:
-            idx = int(answer)
+            idx = int(input())
             if 0 <= idx < len(pets):
                 del pets[idx]
             else:
@@ -260,13 +260,12 @@ def deletar():
             for pet in pets:
                 for key, value in pet.items():
                     file.write(f"{key}: {value}\n")
+                file.write("\n")
     
     except FileNotFoundError:
         print("Arquivo não encontrado")
 
 def registrar_evento():
-    date = ""
-    obs = ""
     try:
         with open("dados pet.txt", 'r', encoding="utf-8") as file:
             content = file.read().strip()
@@ -659,7 +658,7 @@ def gerenciar_metas():
                     limpar_terminal()
                     try:
                         with open("metas.txt", 'r', encoding="utf-8") as file:
-                            lines = file.read().splitlines
+                            lines = file.read().splitlines()
                         block = []
                         show = False
                         for line in lines + [""]:
