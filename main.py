@@ -25,6 +25,7 @@ def menu():
         print(f"5 - Gerenciar metas")
         print(f"6 - Registrar evento")
         print(f"7 - Gerar Sugestões Personalizadas de Cuidados")
+        print(f"8 - Quantidade de pets")
         print(f"0 - Fechar Programa")
         try:
             opcao = int(input())
@@ -65,6 +66,8 @@ def menu():
                 case 7:
                     limpar_terminal()
                     selecionar_sugestao()
+                case 8:
+                    contar_pets()
                 case 0:
                     limpar_terminal()
                     break
@@ -692,6 +695,19 @@ def gerenciar_metas():
         
     except FileNotFoundError:
         print('Arquivo não existe. Tente "Adicionar" primeiro.')
+
+def contar_pets():
+    try:
+        with open("dados pet.txt", 'r', encoding="utf-8") as file:
+            lines = file.readlines()
+            cont = 0
+            for line in lines:
+                if line.strip().startswith("Nome:"):
+                    cont += 1
+            print(f"Você tem {cont} pets cadastrados")
+    except FileNotFoundError:
+        print('O arquivo não existe. Tente "Adicionar" primeiro.')
+
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
