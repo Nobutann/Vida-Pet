@@ -253,7 +253,7 @@ def deletar():
         if answer.lower() == "v":
             pass
         else:
-            idx = int(input())
+            idx = int(answer)
             if 0 <= idx < len(pets):
                 del pets[idx]
             else:

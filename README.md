@@ -14,7 +14,8 @@ Você pode cadastrar pets, editar dados, registrar eventos (como vacinações ou
    - Vacinações  
    - Consultas veterinárias  
    - Aplicação de remédios  
-7. Gerar sugestões personalizadas de cuidados com base na espécie e idade do pet  
+7. Gerar sugestões personalizadas de cuidados com base na espécie e idade do pet
+8. Contar a quantidade de pets registradas  
 
 ## Armazenamento
 
