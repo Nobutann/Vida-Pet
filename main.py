@@ -132,7 +132,7 @@ def adicionar():
 
 def salvar_dados(pet):
     try:
-        with open("dados pet.txt", 'a', newline="", encoding="utf-8") as file:
+        with open("dados pet.txt", 'a', encoding="utf-8") as file:
             for key, value in pet.items():
                 file.write(f"{key}: {value}\n")
             file.write("\n")
@@ -170,7 +170,7 @@ def editar_arquivos():
             pets.append(pet)
         
         for i, pet in enumerate(pets):
-            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
+            print(f"{i} - {pet["Nome"]} ({pet["Espécie"]})")
 
         try:
             idx = int(input("Pet para editar: "))
