@@ -22,8 +22,9 @@ def menu():
         print(f"2 - Visualizar")
         print(f"3 - Editar")
         print(f"4 - Excluir")
-        print(f"5 - Registrar evento")
-        print(f"6 - Gerar Sugestões Personalizadas de Cuidados")
+        print(f"5 - Gerenciar metas")
+        print(f"6 - Registrar evento")
+        print(f"7 - Gerar Sugestões Personalizadas de Cuidados")
         print(f"0 - Fechar Programa")
         try:
             opcao = int(input())
@@ -57,8 +58,11 @@ def menu():
                     limpar_terminal()
                 case 5:
                     limpar_terminal()
-                    registrar_evento()
+                    gerenciar_metas()
                 case 6:
+                    limpar_terminal()
+                    registrar_evento()
+                case 7:
                     limpar_terminal()
                     selecionar_sugestao()
                 case 0:
@@ -105,10 +109,11 @@ def adicionar():
                 limpar_terminal()
                 while True:
                     print("Insira no formato (dd/mm/aaaa)")
-                    data = input()
                     try:
+                        data = input()
                         datetime.datetime.strptime(data, "%d/%m/%Y")
                         pet["Data de nascimento"] = data
+                        break
                     except ValueError:
                         print("Formato inválido. Use dd/mm/aaaa")
 
@@ -318,7 +323,7 @@ def registrar_evento():
             print("Valor inválido")
 
     except FileNotFoundError:
-        print("Arquivo não existe, tente \"Adicionar\" primeiro.")
+        print('Arquivo não existe, tente "Adicionar" primeiro.')
     
 def coletar_evento(tipo_evento, pet):
     date = ""
@@ -603,6 +608,91 @@ def sugestao_selecionada(tipo_sugestao, pet):
     input("\nPressione Enter para continuar...")
     limpar_terminal()
 
+def gerenciar_metas():
+    try:
+        with open("dados pet.txt", 'r', newline="", encoding="utf-8") as file:
+            content = file.read().strip()
+ 
+        blocks = content.split("\n\n")
+        pets = []
+
+        for block in blocks:
+            pet = {}
+            lines = block.split("\n")
+            
+            for line in lines:
+                key, value = line.split(": ", 1)
+                pet[key] = value
+
+            pets.append(pet)
+
+        for i, pet in enumerate(pets):
+            print(f'{i} - {pet["Nome"]} ({pet["Espécie"]})')
+
+        try:
+            idx = int(input())
+            if 0 <= idx < len(pets):
+                pet = pets[idx]
+            else:
+                print("Pet não existe.")
+        except ValueError:
+            print("Valor inválido")
+
+        metas = []
+        limpar_terminal()
+        while True:
+            print("1 - Adicionar meta")
+            print("2 - Visualizar metas")
+            print("0 - Salvar e Voltar")
+
+            try:
+                choice = int(input())
+            except ValueError:
+                print("Inválido")
+
+            match choice:
+                case 1:
+                    limpar_terminal()
+                    meta = input()
+                    metas.append(meta.strip())
+                case 2:
+                    limpar_terminal()
+                    try:
+                        with open("metas.txt", 'r', encoding="utf-8") as file:
+                            lines = file.read().splitlines
+                        block = []
+                        show = False
+                        for line in lines + [""]:
+                            if line.startswith("Pet: "):
+                                show = (line == f"Pet: {pet['Nome']}")
+                            if show and line:
+                                block.append(line)
+                            elif show and not line:
+                                break
+                        if block:
+                            print("Metas:\n")
+                            print("\n".join(block))
+                        else:
+                            print("Nenhuma meta para esse pet.")
+                    except FileNotFoundError:
+                        print("Adicione uma meta primeiro.")
+                case 0:
+                    limpar_terminal()
+                    break
+                case _:
+                    print("Inválido")
+
+        if metas:
+            with open("metas.txt", 'a', encoding="utf-8") as file:
+                file.write(f"Pet: {pet['Nome']}\n")
+                for meta in metas:
+                    file.write(f"Meta: {meta}\n")
+                file.write("\n")
+        else:
+            print("Nenhuma adicionada")
+        
+    except FileNotFoundError:
+        print('Arquivo não existe. Tente "Adicionar" primeiro.')
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
